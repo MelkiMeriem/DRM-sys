@@ -1,0 +1,14 @@
+server:
+  port: ${HTTP_PORT:8081}
+
+drm:
+  node-id: ${NODE_ID:node1}
+  grpc-port: ${GRPC_PORT:50051}
+  peers:
+    node1: ${PEER_NODE1:localhost:50051}
+    node2: ${PEER_NODE2:localhost:50052}
+    node3: ${PEER_NODE3:localhost:50053}
+
+spring:
+  thymeleaf:
+    cache: false

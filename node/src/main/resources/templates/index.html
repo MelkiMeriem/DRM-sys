@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>DRM Dashboard</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; color: #111; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .card { border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; }
+    .muted { color: #6b7280; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 8px; border-bottom: 1px solid #f0f0f0; text-align: left; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; background: #f3f4f6; }
+    .leader { background: #dcfce7; }
+    .unreachable { background: #fee2e2; }
+  </style>
+</head>
+<body>
+  <h1>DRM Dashboard</h1>
+  <p class="muted">Mini orchestrateur distribué (gRPC + consensus + exécution unique).</p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Ce nœud</h2>
+      <p><strong>Node ID:</strong> <span th:text="${nodeId}"></span></p>
+      <p><strong>gRPC:</strong> <span th:text="${grpcPort}"></span></p>
+      <p><strong>Rôle:</strong> <span class="pill" th:classappend="${role} == 'LEADER' ? ' leader' : ''" th:text="${role}"></span></p>
+      <p><strong>Term:</strong> <span th:text="${term}"></span></p>
+      <p><strong>Leader:</strong> <span th:text="${leaderId} ?: '-'"></span></p>
+      <p><strong>Dernier heartbeat (ms):</strong> <span th:text="${lastHeartbeat}"></span></p>
+    </div>
+
+    <div class="card">
+      <h2>Peers</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>Node</th>
+          <th>Rôle</th>
+          <th>Term</th>
+          <th>Leader</th>
+          <th>Jobs</th>
+          <th>Running</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${peers}">
+          <td th:text="${p.nodeId}"></td>
+          <td>
+            <span class="pill"
+                  th:classappend="${p.role} == 'LEADER' ? ' leader' : (${p.role} == 'UNREACHABLE' ? ' unreachable' : '')"
+                  th:text="${p.role}">
+            </span>
+          </td>
+          <td th:text="${p.term}"></td>
+          <td th:text="${p.leaderId} ?: '-'"></td>
+          <td th:text="${p.jobsTotal}"></td>
+          <td th:text="${p.jobsRunning}"></td>
+        </tr>
+        </tbody>
+      </table>
+      <p class="muted" style="margin-top: 10px;">Astuce: lance 3 nœuds avec ports différents, et rafraîchis.</p>
+    </div>
+  </div>
+</body>
+</html>
+
