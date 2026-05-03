@@ -482,5 +482,4 @@ Term actuel    : 1
 
 ---
 
-*Bonne présentation ! *
 # DRM
